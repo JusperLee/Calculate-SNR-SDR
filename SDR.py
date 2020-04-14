@@ -2,7 +2,7 @@ from mir_eval.separation import bss_eval_sources
 from itertools import permutations
 
 
-def SDR(est, egs):
+def SDR(est, egs, mix):
     '''
         calculate SDR
         est: Network generated audio
@@ -10,14 +10,12 @@ def SDR(est, egs):
     '''
     length = est.numpy().shape[0]
     sdr, _, _, _ = bss_eval_sources(egs.numpy()[:length], est.numpy()[:length])
-    return float(sdr)
+    mix_sdr, _, _, _ = bss_eval_sources(egs.numpy()[:length], mix.numpy()[:length])
+    return float(sdr-mix_sdr)
 
 
-def permutation_sdr(est_list, egs_list):
+def permutation_sdr(est_list, egs_list, mix, per):
     n = len(est_list)
-    sdrs = []
-    for p in permutations(range(n)):
-        result = sum([SDR(est_list[a], egs_list[b])
-                      for a, b in enumerate(p)])/n
-        sdrs.append(result)
-    return max(sdrs)
+    result = sum([SDR(est_list[a], egs_list[b], mix)
+                      for a, b in enumerate(per)])/n
+    return result

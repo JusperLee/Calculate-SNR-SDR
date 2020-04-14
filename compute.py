@@ -14,31 +14,28 @@ def main(est_spk1, est_spk2, egs_spk1, egs_spk2):
     x = [i for i in range(length)]
     sdr = []
     snr = []
-    for idx in tqdm.tqdm(range(length)):
+    index = 0
+    for idx in range(length):
         ests = [est_spk1[idx], est_spk2[idx]]
         egs = [egs_spk1[idx], egs_spk2[idx]]
-        sdr.append(float(permutation_sdr(ests, egs)))
-        snr.append(float(permute_SI_SNR(ests, egs)))
+        mix = egs_spk1[idx]+egs_spk2[idx]
 
-    plt.title('Sampels SNR and SDR Results')
-    ax = plt.subplot()
-    tick_spacing = 10
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
+        _snr, per = permute_SI_SNR(ests, egs, mix)
+        _sdr = permutation_sdr(ests, egs, mix, per)
+    
+        index += 1
+        if True:
+            sdr.append(float(_sdr))
+            snr.append(float(_snr))
+            print('\r{} : {}, SNR: {:5f}, SDR: {:5f}'.format(index, length, _snr, _sdr), end='')
 
-    plt.scatter(x, sdr, marker='x', color='m', label=u'sdr', s=5)
-    plt.scatter(x, snr, marker='o', color='c', label=u'snr', s=5)
-    plt.legend()
-    #plt.xticks(l, lx)
-    plt.ylabel('value')
-    plt.xlabel('sample index')
-    plt.savefig('convtasnet_results.png')
-    print('Average SNR: {:.5f}'.format(float(sum(snr))/length))
-    print('Average SDR: {:.5f}'.format(float(sum(sdr)/length)))
+    print('\nAverage SNRi: {:.5f}'.format(float(sum(snr))/len(sdr)))
+    print('Average SDRi: {:.5f}'.format(float(sum(sdr)/len(sdr))))
 
 
 if __name__ == "__main__":
-    est_spk1 = '/home/likai/data1/create_scp/conv_spk1.scp'
-    est_spk2 = '/home/likai/data1/create_scp/conv_spk2.scp'
+    est_spk1 = '/home/likai/data1/create_scp/self_conv_spk1.scp'
+    est_spk2 = '/home/likai/data1/create_scp/self_conv_spk2.scp'
     egs_spk1 = '/home/likai/data1/create_scp/tt_s1.scp'
     egs_spk2 = '/home/likai/data1/create_scp/tt_s2.scp'
     main(est_spk1, est_spk2, egs_spk1, egs_spk2)
