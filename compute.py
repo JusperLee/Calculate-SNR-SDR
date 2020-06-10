@@ -27,7 +27,7 @@ def main(est_spk1, est_spk2, egs_spk1, egs_spk2):
         if True:
             sdr.append(float(_sdr))
             snr.append(float(_snr))
-            print('\r{} : {}, SNR: {:5f}, SDR: {:5f}'.format(index, length, _snr, _sdr), end='')
+            print('\r{} : {}, SI-SNRi: {:5f}, SDRi: {:5f}'.format(index, length, _snr, _sdr), end='')
 
     print('\nAverage SNRi: {:.5f}'.format(float(sum(snr))/len(sdr)))
     print('Average SDRi: {:.5f}'.format(float(sum(sdr)/len(sdr))))
