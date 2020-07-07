@@ -1,3 +1,10 @@
+# -*- encoding: utf-8 -*-
+'''
+@Filename    :SNR.py
+@Time        :2020/07/07 22:47:44
+@Author      :Kai Li
+@Version     :1.0
+'''
 import torch
 from itertools import permutations
 

@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 '''
-@Filename    :AudioReader.py
-@Time        :2020/07/07 22:48:25
+@Filename    :NpzReader.py
+@Time        :2020/07/07 22:49:09
 @Author      :Kai Li
 @Version     :1.0
 '''
 
 import torchaudio
 import torch
-
+import numpy as np
 
 def handle_scp(scp_path):
     '''
@@ -84,11 +84,8 @@ class AudioReader(object):
         self.keys = list(self.index_dict.keys())
 
     def _load(self, key):
-        src, sr = read_wav(self.index_dict[key], return_rate=True)
-        if self.sample_rate is not None and sr != self.sample_rate:
-            raise RuntimeError('SampleRate mismatch: {:d} vs {:d}'.format(
-                sr, self.sample_rate))
-        return src
+        src = np.load(self.index_dict[key])['data']
+        return torch.from_numpy(src)
 
     def __len__(self):
         return len(self.keys)

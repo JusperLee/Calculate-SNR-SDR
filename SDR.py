@@ -1,3 +1,10 @@
+# -*- encoding: utf-8 -*-
+'''
+@Filename    :SDR.py
+@Time        :2020/07/07 22:47:36
+@Author      :Kai Li
+@Version     :1.0
+'''
 from mir_eval.separation import bss_eval_sources
 from itertools import permutations
 
